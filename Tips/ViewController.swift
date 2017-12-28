@@ -10,15 +10,15 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var total = 0.0
+    var pplNum = 1
     @IBOutlet weak var TipsPic: UIImageView!
     @IBOutlet weak var pplLabel: UILabel!
     
-    @IBAction func slider(_ sender: UISlider){
-        pplLabel.text = String(Int(sender.value))
-    }
+    @IBOutlet weak var splitAmountLabel: UILabel!
+    
     @IBOutlet weak var billField: UITextField!
     @IBOutlet weak var tipLabel: UILabel!
-    @IBOutlet weak var splitAmountLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var tipControl: UISegmentedControl!
     override func viewDidLoad() {
@@ -37,15 +37,20 @@ class ViewController: UIViewController {
     }
     
    
-    @IBAction func calculateTip(_ sender: Any) {
+    @IBAction func calculateTip(_ sender: Any){
         let tipPercentages = [0.15,0.18,0.20]
         let bill = Double(billField.text!) ?? 0
         let tip = bill*tipPercentages[tipControl.selectedSegmentIndex]
-        let total = bill+tip
-        let pplNum = Double(pplLabel.text!)
-        let splitAmount = total/pplNum!
+        total = bill+tip
         tipLabel.text = String(format: "+$%.2f",tip)
         totalLabel.text = String(format: "$%.2f",total)
+        splitAmountLabel.text = String(format: "$%.2f",total/Double(pplNum))
+    }
+    @IBAction func slider(_ sender: UISlider){
+        pplNum = Int(sender.value)
+        pplLabel.text = String(pplNum)
+        let splitAmount = Double((Int(total*100)/Int((sender.value))))/100.0
+        print(splitAmount)
         splitAmountLabel.text = String(format: "$%.2f",splitAmount)
     }
 }
